@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">OBDAndroid</string>
-    <string name="title_activity_test">TestActivity</string>
+    <string name="app_name">OBDAndroidApp</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_bajs">bajsActivity</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>
