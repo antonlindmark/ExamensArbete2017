@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,14 +24,21 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private String selectedFromList;
     private BluetoothAdapter mBluetoothAdapter;
+    private Button refresher;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.list);
+        refresher = (Button) findViewById(R.id.refresh);
         bluetoothConnection();
 
+        refresher.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                updatePairedDevices();
+            }
+        });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
 
@@ -41,17 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
                 BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(selectedFromList);
                 ConnectThread t = new ConnectThread(d,mBluetoothAdapter);
-                System.out.println("1");
                 t.start();
-                System.out.println("2");
             }
         });
-
     }
-
     public void bluetoothConnection(){
         // Check whether the device has bluetooth
-       mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             // Device does not support Bluetooth
         }
@@ -60,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
+    }
 
+    public void updatePairedDevices(){
         ArrayList<String> al = new ArrayList<>() ;
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {

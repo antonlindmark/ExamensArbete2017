@@ -28,8 +28,8 @@ public class ConnectThread extends Thread {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
             // MY_UUID is the app's UUID string, also used in the server code.
 
-            UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            tmp = device.createRfcommSocketToServiceRecord(uuid);
+            //UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+            tmp = device.createRfcommSocketToServiceRecord(device.getUuids()[0].getUuid());
         } catch (IOException e) {
             Log.e(TAG, "Socket's create() method failed", e);
         }
@@ -45,11 +45,18 @@ public class ConnectThread extends Thread {
             // Connect to the remote device through the socket. This call blocks
             // until it succeeds or throws an exception.
             mmSocket.connect();
-            System.out.println("CONNECTED");
+
+            if(mmSocket.isConnected()){
+                System.out.println("CONNECTED");
+            }
+            else{
+                System.out.println("NOT CONNECTED");
+            }
         } catch (IOException connectException) {
             // Unable to connect; close the socket and return.
             try {
                 mmSocket.close();
+                System.out.println("CONNECTION IS CLOSED");
             } catch (IOException closeException) {
                 Log.e(TAG, "Could not close the client socket", closeException);
             }
