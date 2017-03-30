@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
-            android:id="@+id/obd2set"
-            android:title="OBD2 Settings" />
+            android:id="@+id/startMenu"
+            android:title="Start" />
         <item
             android:id="@+id/btopt"
             android:title="Bluetooth Options" />

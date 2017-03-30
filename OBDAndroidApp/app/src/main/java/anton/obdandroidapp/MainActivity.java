@@ -4,8 +4,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -28,50 +33,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private int REQUEST_ENABLE_BT=1;
-    private ListView listView;
-    private String selectedFromList;
     private BluetoothAdapter mBluetoothAdapter;
-    private Button refresher;
-    private ImageButton bluetoothSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.list);
-        refresher = (Button) findViewById(R.id.refresh);
-        bluetoothSettings = (ImageButton)findViewById(R.id.imageButton);
-        bluetoothConnection();
-
-        //If we want to jump to other activity use this.
-//   startActivity(new Intent(MainActivity.this, SecondActivity.class));
-
-        bluetoothSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this, TestActivity.class));
-            }
-        });
-
-        refresher.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                updatePairedDevices();
-            }
-        });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-
-                String tempString= (String) (listView.getItemAtPosition(myItemInt));
-                String parts[] = tempString.split("-");
-                selectedFromList=parts[1];
-                System.out.println(selectedFromList);
-
-                BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(selectedFromList);
-                ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter);
-                t.start();
-            }
-        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -93,15 +61,30 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
+    boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Press back again to leave", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
         }
+
     }
 
     @Override
@@ -129,14 +112,24 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.obd2set) {
-            startActivity(new Intent(MainActivity.this, TestActivity.class));
+        if (id == R.id.startMenu) {
+            FirstFragment fragment = new FirstFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment1");
+            fragmentTransaction.commit();
+          //  startActivity(new Intent(MainActivity.this, TestActivity.class));
         } else if (id == R.id.btopt) {
+            SecondFragment fragment = new SecondFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment2");
 
+            fragmentTransaction.commit();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -156,7 +149,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void updatePairedDevices(){
+    public void updatePairedDevices(ListView l){
         ArrayList<String> al = new ArrayList<>() ;
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
         if (pairedDevices.size() > 0) {
@@ -167,6 +160,12 @@ public class MainActivity extends AppCompatActivity
                 al.add(deviceName+"-"+deviceHardwareAddress);
             }
         }
-        listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, al));
+        l.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, al));
+    }
+
+    public void startThread(String listSelection){
+        BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(listSelection);
+        ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter);
+        t.start();
     }
 }
