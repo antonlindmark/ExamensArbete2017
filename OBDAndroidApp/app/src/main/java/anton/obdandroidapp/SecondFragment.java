@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -26,17 +27,13 @@ import java.util.Set;
  */
 public class SecondFragment extends Fragment {
 
-    private int REQUEST_ENABLE_BT=1;
     private ListView listView;
     private String selectedFromList;
-    private BluetoothAdapter mBluetoothAdapter;
     private Button refresher;
-    private TextView mTextField;
 
     public SecondFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,19 +50,16 @@ public class SecondFragment extends Fragment {
                 ((MainActivity)getActivity()).updatePairedDevices(listView);
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
 
                 String tempString= (String) (listView.getItemAtPosition(myItemInt));
-                String parts[] = tempString.split("-");
+                String parts[] = tempString.split("-"); // Indicator to separate name from MAC-Address
                 selectedFromList=parts[1];
                 System.out.println(selectedFromList);
                 ((MainActivity)getActivity()).startThread(selectedFromList);
             }
         });
-
-
         // Inflate the layout for this fragment
         return view;
     }

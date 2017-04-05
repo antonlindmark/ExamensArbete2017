@@ -4,11 +4,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,13 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -40,17 +34,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirstFragment fragment = new FirstFragment();
+        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_content,fragment,"fragment1");
+        fragmentTransaction.commit();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -87,28 +77,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -126,10 +94,26 @@ public class MainActivity extends AppCompatActivity
             SecondFragment fragment = new SecondFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frame_content,fragment,"fragment2");
-
             fragmentTransaction.commit();
         }
-
+        else if (id == R.id.livevalues) {
+            LiveFragment fragment = new LiveFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment3");
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.trips) {
+            ListFragment fragment = new ListFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment4");
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.help) {
+            HelpFragment fragment = new HelpFragment();
+            FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment5");
+            fragmentTransaction.commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -162,7 +146,6 @@ public class MainActivity extends AppCompatActivity
         }
         l.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, al));
     }
-
     public void startThread(String listSelection){
         BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(listSelection);
         ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter);

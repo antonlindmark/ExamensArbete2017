@@ -9,6 +9,15 @@
         <item
             android:id="@+id/btopt"
             android:title="Bluetooth Options" />
+        <item
+            android:id="@+id/livevalues"
+            android:title="Live Values" />
+        <item
+            android:id="@+id/trips"
+            android:title="Trips" />
+        <item
+            android:id="@+id/help"
+            android:title="Help" />
 
     </group>
 

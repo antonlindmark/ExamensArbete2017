@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="anton.obdandroidapp.LiveFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:text="Here the data from the OBD2 will  be displayed in real time "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="100dp" />
+
+    <TextView
+        android:text="The data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_marginLeft="43dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="155dp"
+        android:id="@+id/textView5" />
+</RelativeLayout>
