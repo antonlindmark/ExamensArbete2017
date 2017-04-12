@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
@@ -28,15 +31,21 @@ public class MainActivity extends AppCompatActivity
 
     private int REQUEST_ENABLE_BT=1;
     private BluetoothAdapter mBluetoothAdapter;
-
+    private  Fragment[] arrayFrag = new Fragment[5];
+    public List<String> trip_list =new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirstFragment fragment = new FirstFragment();
+        arrayFrag[0]=new FirstFragment();
+        arrayFrag[1]=new SecondFragment();
+        arrayFrag[2]=new LiveFragment();
+        arrayFrag[3]=new ListFragment();
+        arrayFrag[4]=new HelpFragment();
+
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_content,fragment,"fragment1");
+        fragmentTransaction.replace(R.id.frame_content,arrayFrag[0],"fragment1");
         fragmentTransaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,33 +94,27 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.startMenu) {
-            FirstFragment fragment = new FirstFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment1");
+            fragmentTransaction.replace(R.id.frame_content,arrayFrag[0],"fragment1");
             fragmentTransaction.commit();
-          //  startActivity(new Intent(MainActivity.this, TestActivity.class));
         } else if (id == R.id.btopt) {
-            SecondFragment fragment = new SecondFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment2");
+            fragmentTransaction.replace(R.id.frame_content,arrayFrag[1],"fragment2");
             fragmentTransaction.commit();
         }
         else if (id == R.id.livevalues) {
-            LiveFragment fragment = new LiveFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment3");
+            fragmentTransaction.replace(R.id.frame_content,arrayFrag[2],"fragment3");
             fragmentTransaction.commit();
         }
         else if (id == R.id.trips) {
-            ListFragment fragment = new ListFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment4");
+            fragmentTransaction.replace(R.id.frame_content,arrayFrag[3],"fragment4");
             fragmentTransaction.commit();
         }
         else if (id == R.id.help) {
-            HelpFragment fragment = new HelpFragment();
             FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame_content,fragment,"fragment5");
+            fragmentTransaction.replace(R.id.frame_content,arrayFrag[4],"fragment5");
             fragmentTransaction.commit();
         }
 
@@ -150,5 +153,11 @@ public class MainActivity extends AppCompatActivity
         BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(listSelection);
         ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter);
         t.start();
+    }
+    public List getList(){
+        return trip_list;
+    }
+    public void changeList(String str){
+        trip_list.add(str);
     }
 }

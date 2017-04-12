@@ -1,18 +1,20 @@
 package anton.obdandroidapp;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +22,8 @@ import java.util.List;
 public class ListFragment extends Fragment {
 
     private ListView listView;
-    private int counter = 3;
+    private int counter = 0;
+    final MainActivity a = new MainActivity();
 
     public ListFragment() {
         // Required empty public constructor
@@ -29,27 +32,20 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_list,container,false);
+        final View view = inflater.inflate(R.layout.fragment_list,container,false);
 
         listView = (ListView) view.findViewById(R.id.triplist);
 
-        String[] trips = new String[] { // Array of all the trips
-                "Trip  1",
-                "Trip  2",
-                "Trip  3"
-        };
         // Create a List from String Array elements
-        final List<String> trip_list = new ArrayList<String>(Arrays.asList(trips));
-
         // Create an ArrayAdapter from List
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (view.getContext(), android.R.layout.simple_list_item_1, trip_list);
+                (view.getContext(), android.R.layout.simple_list_item_1, a.getList());
 
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-
                 String tempString= (String) (listView.getItemAtPosition(myItemInt));
+                showPopup(listView,tempString); // Send with string to test atm
                 System.out.println(tempString);
             }
         });
@@ -59,10 +55,8 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 counter++;
-                trip_list.add("Trip  "+counter);
+                a.changeList("Trip  "+counter);
                 arrayAdapter.notifyDataSetChanged();
-
-
             }
         });
 
@@ -76,4 +70,38 @@ public class ListFragment extends Fragment {
         });
         return view;
     }
+
+    public void showPopup(View anchorView,String data) {
+        View popupView = getActivity().getLayoutInflater().inflate(R.layout.popup_layout, null);
+
+        PopupWindow popupWindow = new PopupWindow(popupView,
+                AppBarLayout.LayoutParams.WRAP_CONTENT, AppBarLayout.LayoutParams.WRAP_CONTENT);
+
+        // Example: If you have a TextView inside `popup_layout.xml`
+
+        // Initialize more widgets from `popup_layout.xml`
+        TextView tv = (TextView) popupView.findViewById(R.id.tv);
+
+        tv.setText(data);
+
+        popupWindow.setHeight(800);
+        popupWindow.setWidth(550);
+        // If the PopupWindow should be focusable
+        popupWindow.setFocusable(true);
+
+        // If you need the PopupWindow to dismiss when when touched outside
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+
+        int location[] = new int[2];
+
+        // Get the View's(the one that was clicked in the Fragment) location
+        anchorView.getLocationOnScreen(location);
+
+        // Using location, the PopupWindow will be displayed right under anchorView
+        popupWindow.showAtLocation(anchorView,Gravity.CENTER,0,-70);
+
+
+
+    }
+
 }
