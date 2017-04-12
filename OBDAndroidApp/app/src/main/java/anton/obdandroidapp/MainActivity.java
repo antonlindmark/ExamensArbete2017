@@ -5,24 +5,19 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -32,12 +27,13 @@ public class MainActivity extends AppCompatActivity
     private int REQUEST_ENABLE_BT=1;
     private BluetoothAdapter mBluetoothAdapter;
     private  Fragment[] arrayFrag = new Fragment[5];
-    public List<String> trip_list =new ArrayList<String>();
+    public List<String> trip_list =new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Defines all the fragments in a array to be able to access them later on
         arrayFrag[0]=new FirstFragment();
         arrayFrag[1]=new SecondFragment();
         arrayFrag[2]=new LiveFragment();
@@ -71,7 +67,6 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
                 return;
             }
-
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Press back again to leave", Toast.LENGTH_SHORT).show();
 
@@ -83,9 +78,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }, 2000);
         }
-
     }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -117,7 +110,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.frame_content,arrayFrag[4],"fragment5");
             fragmentTransaction.commit();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -147,7 +139,7 @@ public class MainActivity extends AppCompatActivity
                 al.add(deviceName+"-"+deviceHardwareAddress);
             }
         }
-        l.setAdapter(new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1, al));
+        l.setAdapter(new ArrayAdapter<>(getApplicationContext(),android.R.layout.simple_list_item_1, al));
     }
     public void startThread(String listSelection){
         BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(listSelection);

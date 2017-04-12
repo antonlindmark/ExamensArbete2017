@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -26,14 +25,12 @@ public class ListFragment extends Fragment {
     final MainActivity a = new MainActivity();
 
     public ListFragment() {
-        // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_list,container,false);
-
         listView = (ListView) view.findViewById(R.id.triplist);
 
         // Create a List from String Array elements
@@ -49,7 +46,6 @@ public class ListFragment extends Fragment {
                 System.out.println(tempString);
             }
         });
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +55,6 @@ public class ListFragment extends Fragment {
                 arrayAdapter.notifyDataSetChanged();
             }
         });
-
         FloatingActionButton fab2 = (FloatingActionButton) view.findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,18 +65,12 @@ public class ListFragment extends Fragment {
         });
         return view;
     }
-
     public void showPopup(View anchorView,String data) {
         View popupView = getActivity().getLayoutInflater().inflate(R.layout.popup_layout, null);
 
         PopupWindow popupWindow = new PopupWindow(popupView,
                 AppBarLayout.LayoutParams.WRAP_CONTENT, AppBarLayout.LayoutParams.WRAP_CONTENT);
-
-        // Example: If you have a TextView inside `popup_layout.xml`
-
-        // Initialize more widgets from `popup_layout.xml`
         TextView tv = (TextView) popupView.findViewById(R.id.tv);
-
         tv.setText(data);
 
         popupWindow.setHeight(800);
@@ -91,7 +80,6 @@ public class ListFragment extends Fragment {
 
         // If you need the PopupWindow to dismiss when when touched outside
         popupWindow.setBackgroundDrawable(new ColorDrawable());
-
         int location[] = new int[2];
 
         // Get the View's(the one that was clicked in the Fragment) location
@@ -99,9 +87,5 @@ public class ListFragment extends Fragment {
 
         // Using location, the PopupWindow will be displayed right under anchorView
         popupWindow.showAtLocation(anchorView,Gravity.CENTER,0,-70);
-
-
-
     }
-
 }

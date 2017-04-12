@@ -3,7 +3,6 @@ package anton.obdandroidapp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.Bundle;
 import android.util.Log;
 import com.github.pires.obd.commands.SpeedCommand;
 import com.github.pires.obd.commands.engine.LoadCommand;
@@ -29,7 +28,6 @@ public class ConnectedThread extends Thread {
     public ConnectedThread(BluetoothDevice device, BluetoothAdapter Ba) {
         BA=Ba;
         BluetoothSocket tmp = null;
-
         try {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
             // MY_UUID is the app's UUID string, also used in the server code.
@@ -39,22 +37,15 @@ public class ConnectedThread extends Thread {
         }
         socket = tmp;
     }
-
     public void run() {
         // Cancel discovery because it otherwise slows down the connection.
         BA.cancelDiscovery();
-
         try {
             // Connect to the remote device through the socket. This call blocks
             // until it succeeds or throws an exception.
             socket.connect();
-
             if(socket.isConnected()){
                 System.out.println("Connected");
-
-               // DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-                //DataInputStream dis = new DataInputStream(socket.getInputStream());
-
 
                 new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
                 new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
@@ -66,14 +57,13 @@ public class ConnectedThread extends Thread {
                 SpeedCommand speedCommand = new SpeedCommand();
                 LoadCommand loadCommand = new LoadCommand();
 
-                while (!Thread.currentThread().isInterrupted())
-                {
+                while (!Thread.currentThread().isInterrupted()) {
                     loadCommand.run(socket.getInputStream(),socket.getOutputStream());
                     engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
                     speedCommand.run(socket.getInputStream(), socket.getOutputStream());
                     // TODO handle commands result
 
-                   rpmValue = engineRpmCommand.getCalculatedResult();
+                    rpmValue = engineRpmCommand.getCalculatedResult();
 
                     LiveFragment l = new LiveFragment();
                     l.updateValues(rpmValue);
@@ -82,7 +72,6 @@ public class ConnectedThread extends Thread {
                     Log.d(TAG, "RPM: " + engineRpmCommand.getCalculatedResult());
                     Log.d(TAG, "Speed: " + speedCommand.getFormattedResult());
                 }
-
             }
             else{
                 System.out.println("Not connected");
@@ -101,6 +90,5 @@ public class ConnectedThread extends Thread {
         }
         // The connection attempt succeeded. Perform work associated with
         // the connection in a separate thread.
-        // manageMyConnectedSocket(mmSocket);
     }
 }
