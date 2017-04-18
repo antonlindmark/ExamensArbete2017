@@ -6,27 +6,199 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:text="Here the data from the OBD2 will  be displayed in real time "
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="100dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="100dp" />
+        android:orientation="horizontal"
+        android:stretchColumns="*" >
 
-    <TextView
-        android:text="The data"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="#92C94A" >
+
+
+            <TextView
+                android:id="@+id/dataTypeID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="Datatype"
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" >
+
+                <View style="@style/Divider" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/ValueID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="Value"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        </TableRow>
+
+        <!-- display this button in 3rd column via layout_column(zero based) -->
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark" >
+
+
+            <TextView
+                android:id="@+id/speedID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="Speed"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" >
+
+                <View style="@style/Divider" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/speedValueID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="0 km/h"
+                android:textColor="#FFF"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="#92C94A" >
+
+
+            <TextView
+                android:id="@+id/rpmID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="RPM"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" >
+
+                <View style="@style/Divider" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/rpmValueID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="0"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+        </TableRow>
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark">
+
+
+            <TextView
+                android:id="@+id/EngineloadID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="Engine Load"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" >
+
+                <View style="@style/Divider" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/engineloadValueID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="0 %"
+                android:textColor="#FFF"
+                android:textSize="16sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="#92C94A" >
+
+
+            <TextView
+                android:id="@+id/distID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp"
+                android:text="Trip distance"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent" >
+
+                <View style="@style/Divider" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/distValueID"
+                android:paddingBottom="10dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="10dp"
+                android:text="0.0 km"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:text="Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginLeft="43dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="155dp"
-        android:id="@+id/textView5" />
+        android:layout_below="@+id/table"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="135dp"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="120dp"
+        android:id="@+id/startLive" />
+
 </RelativeLayout>

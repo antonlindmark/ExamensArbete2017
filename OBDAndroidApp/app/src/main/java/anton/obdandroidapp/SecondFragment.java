@@ -37,11 +37,13 @@ public class SecondFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
 
+
                 String tempString= (String) (listView.getItemAtPosition(myItemInt));
                 String parts[] = tempString.split("-"); // Indicator to separate name from MAC-Address
                 selectedFromList=parts[1];
                 System.out.println(selectedFromList);
                 ((MainActivity)getActivity()).startThread(selectedFromList);
+
             }
         });
         // Inflate the layout for this fragment

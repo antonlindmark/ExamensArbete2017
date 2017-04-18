@@ -3,6 +3,7 @@ package anton.obdandroidapp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity
     private BluetoothAdapter mBluetoothAdapter;
     private  Fragment[] arrayFrag = new Fragment[5];
     public List<String> trip_list =new ArrayList<>();
+    public ImageButton v;
+    public String rpmValue="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -143,7 +151,7 @@ public class MainActivity extends AppCompatActivity
     }
     public void startThread(String listSelection){
         BluetoothDevice d = mBluetoothAdapter.getRemoteDevice(listSelection);
-        ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter);
+        ConnectedThread t = new ConnectedThread(d,mBluetoothAdapter,MainActivity.this);
         t.start();
     }
     public List getList(){
@@ -151,5 +159,23 @@ public class MainActivity extends AppCompatActivity
     }
     public void changeList(String str){
         trip_list.add(str);
+    }
+
+    public void changeSatusConnected(int status){
+
+        v = (ImageButton) findViewById(R.id.btStatus);
+        if(status==1){
+            v.setBackgroundColor(Color.GREEN);
+        }
+        else{
+            v.setBackgroundColor(Color.RED);
+        }
+    }
+
+    public void updateValues(String rpm){
+        rpmValue =rpm;
+    }
+    public String getRPM(){
+        return rpmValue;
     }
 }

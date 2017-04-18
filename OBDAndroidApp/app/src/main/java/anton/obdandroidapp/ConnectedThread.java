@@ -1,9 +1,14 @@
 package anton.obdandroidapp;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.github.pires.obd.commands.SpeedCommand;
 import com.github.pires.obd.commands.engine.LoadCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
@@ -24,10 +29,14 @@ public class ConnectedThread extends Thread {
     private final BluetoothSocket socket;
     private final BluetoothAdapter BA;
     public String rpmValue;
+    private static MainActivity parent;
 
-    public ConnectedThread(BluetoothDevice device, BluetoothAdapter Ba) {
+
+    public ConnectedThread(BluetoothDevice device, BluetoothAdapter Ba,MainActivity parent) {
         BA=Ba;
         BluetoothSocket tmp = null;
+        this.parent = parent;
+
         try {
             // Get a BluetoothSocket to connect with the given BluetoothDevice.
             // MY_UUID is the app's UUID string, also used in the server code.
@@ -38,6 +47,7 @@ public class ConnectedThread extends Thread {
         socket = tmp;
     }
     public void run() {
+
         // Cancel discovery because it otherwise slows down the connection.
         BA.cancelDiscovery();
         try {
@@ -46,6 +56,19 @@ public class ConnectedThread extends Thread {
             socket.connect();
             if(socket.isConnected()){
                 System.out.println("Connected");
+
+                //Set listitem to green backgrund
+
+
+
+                parent.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(parent.getBaseContext(), "Connected!", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                parent.updateValues("20 RPM");
+
 
                 new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
                 new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
@@ -57,6 +80,7 @@ public class ConnectedThread extends Thread {
                 SpeedCommand speedCommand = new SpeedCommand();
                 LoadCommand loadCommand = new LoadCommand();
 
+
                 while (!Thread.currentThread().isInterrupted()) {
                     loadCommand.run(socket.getInputStream(),socket.getOutputStream());
                     engineRpmCommand.run(socket.getInputStream(), socket.getOutputStream());
@@ -65,22 +89,32 @@ public class ConnectedThread extends Thread {
 
                     rpmValue = engineRpmCommand.getCalculatedResult();
 
-                    LiveFragment l = new LiveFragment();
-                    l.updateValues(rpmValue);
+
 
                     Log.d(TAG, "Engine Load: "+ loadCommand.getCalculatedResult());
                     Log.d(TAG, "RPM: " + engineRpmCommand.getCalculatedResult());
                     Log.d(TAG, "Speed: " + speedCommand.getFormattedResult());
+
+
                 }
+
             }
             else{
+
                 System.out.println("Not connected");
+// reset current item to white again
             }
         } catch (IOException connectException) {
             // Unable to connect; close the socket and return.
             try {
                 socket.close();
                 System.out.println("Connection is closed");
+                parent.runOnUiThread(new Runnable() {
+                    public void run() {
+                        parent.changeSatusConnected(0);
+                        Toast.makeText(parent.getBaseContext(), "Connection is closed", Toast.LENGTH_LONG).show();
+                    }
+                });
             } catch (IOException closeException) {
                 Log.e(TAG, "Could not close the client socket", closeException);
             }
